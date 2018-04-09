@@ -69,17 +69,10 @@ func authenticate(c *ntlm.ServerContext, authenticate []byte) (u *user.User, err
 	return
 }
 
-func authenticate2(c *ntlm.ServerContext, authenticate []byte) (u *user.User, err error) {
+func authenticate2(c *ntlm.ServerContext, authenticate []byte) (err error) {
 
 	defer c.Release()
 	err = c.Update(authenticate)
-
-	if err != nil {
-
-		return
-	}
-
-	u, err = user.Current()
 
 	return
 }
@@ -166,10 +159,10 @@ func Authenticator2(next http.Handler) http.Handler {
 			return
 		}
 		defer delete(contexts, r.RemoteAddr)
-		var u *user.User
-		u, err = authenticate2(context, authPayload)
+
+		err = authenticate2(context, authPayload)
 		if err != nil {
-			log.Println("auth error:", u, err)
+			log.Println("auth error:", err)
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
