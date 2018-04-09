@@ -135,7 +135,7 @@ func Authenticator(next http.Handler) http.Handler {
 
 func Authenticator2(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		if false && len(r.RequestURI) >= 3 && r.RequestURI[0:3] != "/g/" {
+		if len(r.RequestURI) >= 3 && r.RequestURI[0:3] != "/g/" {
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -167,6 +167,9 @@ func Authenticator2(next http.Handler) http.Handler {
 			return
 		}
 		userName := ""
+
+		// https://www.innovation.ch/personal/ronald/ntlm.html
+
 		if authPayload[8] == 3 {
 
 			var length int16
