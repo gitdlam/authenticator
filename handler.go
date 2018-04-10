@@ -15,7 +15,7 @@ import (
 	"runtime"
 	"strings"
 
-	ctx "context"
+	//	ctx "context"
 
 	"github.com/alexbrainman/sspi"
 	"github.com/alexbrainman/sspi/ntlm"
@@ -188,8 +188,10 @@ func Authenticator2(next http.Handler) http.Handler {
 			userName = string(buf)
 		}
 
-		c := ctx.WithValue(r.Context(), "sso", userName)
-		next.ServeHTTP(w, r.WithContext(c))
+		//c := ctx.WithValue(r.Context(), "sso", userName)
+		r.Header.Set("sso", userName)
+		//next.ServeHTTP(w, r.WithContext(c))
+		next.ServeHTTP(w, r)
 	}
 	return http.HandlerFunc(fn)
 }
