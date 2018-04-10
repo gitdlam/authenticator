@@ -190,6 +190,7 @@ func Authenticator2(next http.Handler) http.Handler {
 
 		//c := ctx.WithValue(r.Context(), "sso", userName)
 		r.Header.Set("sso", userName)
+		r.Header.Set("remote_user", userName)
 		//next.ServeHTTP(w, r.WithContext(c))
 		next.ServeHTTP(w, r)
 	}
